@@ -52,7 +52,7 @@ export default function Home({ navigation }) {
       .then(
         Mailer.mail({
           subject: 'test',
-          recipients: ['yourEmail@sysnova.com.br'],
+          recipients: ['yourEmail@example.com.br'],
           body: 'Backup',
           isHTML: true,
           attachments: [{
