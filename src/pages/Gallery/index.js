@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Modal
 } from 'react-native';
-
 import styles from './styles';
 import RNFS from 'react-native-fs';
 
@@ -18,7 +17,6 @@ export default GetPhotos = () => {
   const [source, setSource] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteImage, setDeleteImage] = useState(null);
-
   const directory = `${RNFS.DocumentDirectoryPath}/image`;
 
   useEffect(() => {
@@ -31,35 +29,35 @@ export default GetPhotos = () => {
           },
         );
 
-        /* Se a permissão for consedida chama loadPhoto */
+        // Se a permissão for consedida chama loadPhoto
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          /* Verifica se directory existe */
+          // Verifica se directory existe
           RNFS.exists(directory)
-            .then(loadPhoto())
+            .then(() => loadPhoto())
             .catch(err => { 
               console.log(err.message) 
               alert('Diretório não encontrado')
             })
         }
-        else {
-          alert('Acesso a Galeria negada.');
-        }
+        else alert('Acesso a Galeria negada.');
       }
+      
       requestLocationPermission();
     }
   }, []);
 
-  /* Faz a leitura do directory e se for diferente de 0
-  passamos por cada item do array, filtrando cada item pelo seu path e 
-  atribuindo no setSource */
+  /* 
+   * Faz a leitura do directory e se for diferente de 0
+   * passamos por cada item do array, filtrando cada item pelo seu path e 
+   * atribuindo no setSource 
+   */
   const loadPhoto = () => {
     RNFS.readDir(directory)
       .then((result) => {
         if (result.length != 0) {
           const resultFilter = [];
-          result.filter((item) => {
-            resultFilter.push(item.path);
-          })
+          
+          result.filter(item => resultFilter.push(item.path))
 
           setSource(resultFilter);
         }
@@ -78,9 +76,7 @@ export default GetPhotos = () => {
         setSource(newSource);
         alert('Imagem excluída!');
       })
-      .catch((err) => {
-        alert(err.message);
-      });
+      .catch((err) => alert(err.message));
 
     setDeleteImage(null);
     setModalVisible(false);
@@ -96,7 +92,7 @@ export default GetPhotos = () => {
     setDeleteImage(null);
   }
 
-  /* Renderização de cada imagem presente no useState source */
+  // Renderização de cada imagem presente no useState source
   const renderImage = ({ item, index }) => {
     return (
       <TouchableOpacity
